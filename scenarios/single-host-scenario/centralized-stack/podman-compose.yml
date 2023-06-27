@@ -1,0 +1,43 @@
+version: "3.8"
+x-ros-config: &ros-config
+    - ROS_MASTER_URI=http://ros-master:11311
+services:
+  ros-master:
+    image: ros-master:latest
+    build: ../../../digital-twin-service/ros-master/
+    environment: *ros-config
+  niryo-one-sim-drivers:
+    image: niryo-one-sim-drivers:latest
+    build: ../../../digital-twin-service/niryo-one-drivers/simulation/
+    environment: *ros-config
+    depends_on:
+      - ros-master
+  niryo-one-full-stack:
+    image: niryo-one-full-stack:latest
+    build: ../../../digital-twin-service/niryo-one-stack/niryo-one-full-stack/
+    environment: *ros-config
+    depends_on:
+      - ros-master
+      - niryo-one-sim-drivers
+  niryo-one-coppellia-sim:
+    image: niryo-one-coppellia-sim:latest
+    build: ../../../digital-twin-service/niryo-one-coppellia-sim/
+    environment: *ros-config
+    depends_on:
+      - ros-master
+      - niryo-one-sim-drivers
+      - niryo-one-full-stack
+    ports:
+      - "5901:5901"
+      - "6901:6901"
+  niryo-one-web-interface:
+    image: niryo-one-web-interface:latest
+    build: ../../../digital-twin-service/niryo-one-web-interface/
+    environment: *ros-config
+    depends_on:
+      - ros-master
+      - niryo-one-sim-drivers
+      - niryo-one-full-stack
+    ports:
+      - "8080:8080"
+      

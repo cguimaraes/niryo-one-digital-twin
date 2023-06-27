@@ -27,4 +27,4 @@ RUN rosdep update && \
 
 RUN cd catkin_ws && bash -c "source /opt/ros/melodic/setup.bash && catkin_make"
 
-CMD bash -c "source /opt/ros/melodic/setup.bash && source catkin_ws/devel/setup.bash && roslaunch niryo_one_bringup desktop_rviz_simulation.launch"
+CMD bash -c "source /opt/ros/melodic/setup.bash && source catkin_ws/devel/setup.bash && roslaunch niryo_one_bringup desktop_rviz_simulation.launch --wait"

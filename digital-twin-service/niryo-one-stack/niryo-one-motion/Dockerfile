@@ -1,11 +1,9 @@
-# ROS melodic docker deployment to run ROS on Ubuntu16_04.
 FROM ros:melodic
 MAINTAINER mgroshev@pa.uc3m.es
 
 WORKDIR /root
 RUN useradd -ms /bin/bash niryo
 
-# Install system dependencies. 
 RUN \
   apt-get update && \
   apt-get install -y lsof && \
@@ -25,15 +23,13 @@ RUN rosdep update && \
     mkdir -p catkin_ws/src && cd catkin_ws/src && \
     git clone https://github.com/NiryoRobotics/niryo_one_ros.git .
 
-COPY launch/* catkin_ws/src/niryo_one_bringup/launch/
-RUN mkdir -p /home/niryo/scripts
-COPY scripts/* /home/niryo/scripts/
-
 RUN cd catkin_ws && bash -c "source /opt/ros/melodic/setup.bash && catkin_make"
 
+RUN mkdir -p /home/niryo/scripts
+COPY files/launch/* catkin_ws/src/niryo_one_bringup/launch/
+COPY files/scripts/* /home/niryo/scripts/
+
 WORKDIR /home/niryo/scripts/
-USER root
-RUN chmod +755 wait-for-ros-nodes.sh
-USER niryo
 
 CMD bash -c "./wait-for-ros-nodes.sh"
+

@@ -44,4 +44,4 @@ COPY niryo_one_saved_values/* /home/niryo/niryo_one_saved_values/
 COPY launch/* /home/niryo/catkin_ws/src/niryo_one_bringup/launch/
 
 USER root
-CMD bash -c "source /home/niryo/catkin_ws/devel/setup.bash && roslaunch niryo_one_bringup drivers.launch"
+CMD bash -c "source /home/niryo/catkin_ws/devel/setup.bash && roslaunch niryo_one_bringup drivers.launch --wait"
